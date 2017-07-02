@@ -14,7 +14,12 @@ Interpreting as "Rage"
 >
 ```
 ### Updating Database
-To update the database of (currently only mods) from [the Warframe drop table list](http://n8k6e2y6.ssl.hwcdn.net/repos/hnfvc0o3jnfvc873njb03enrf56.html):
+To update the database of (currently only mods) from [the official Warframe drop table list](http://n8k6e2y6.ssl.hwcdn.net/repos/hnfvc0o3jnfvc873njb03enrf56.html):
 ```bash
 $ python3 update.py
+Downloading page...    done.
+Parsing...             done.
+Extracting mod info... done.
+Writing to file...     done.
+finished.
 ```
