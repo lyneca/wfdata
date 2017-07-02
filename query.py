@@ -7,4 +7,4 @@ while True:
     m = mods[name]
     m.sort(key=lambda x: x.total_chance, reverse=True)
     for d in m:
-        print(f" {d.name:20}: {d.total_chance:.3}%")# (enemy drops mods {d.enemy_mod:5.3}% of the time, out of which {name} drops {d.mod_chance:5.3}% of the time.)")
+        print(d)
