@@ -34,8 +34,8 @@ print('done.')
 print('Writing to file...     ', end='')
 sys.stdout.flush()
 
-if not os.path.exists('mods.db'): open('mods.db', 'x').close()
-open('mods.db', 'w').write(repr(mods))
+if not os.path.exists('data/mods.db'): open('data/mods.db', 'x').close()
+open('data/mods.db', 'w').write(repr(mods))
 
 print('done.')
 print('finished.')
