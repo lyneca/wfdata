@@ -3,6 +3,7 @@ from mod import EnemyModDrop, MissionDrop
 import requests
 import sys
 import os
+print("Starting update. This might take a while; we're parsing a lot of HTML here.")
 print('Downloading page...    ', end='')
 sys.stdout.flush()
 r = requests.get('http://n8k6e2y6.ssl.hwcdn.net/repos/hnfvc0o3jnfvc873njb03enrf56.html')

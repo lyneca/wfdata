@@ -6,7 +6,7 @@ class ModDrop:
     def __repr__(self):
         return f"ModDrop(\"{self.dropped_by}\",\"{self.name}\",{self.total_chance})"
     def __str__(self):
-        return f"{self.dropped_by:30}: {self.total_chance:.3}%"
+        return f"{self.dropped_by:.<40}: {self.total_chance:.3}%"
 
 class EnemyModDrop(ModDrop):
     def __init__(self, e, n, em, m, c):
@@ -24,4 +24,4 @@ class MissionDrop(ModDrop):
     def __repr__(self):
         return f"MissionDrop(\"{self.dropped_by}\",\"{self.name}\",\"{self.rotation}\",{self.total_chance})"
     def __str__(self):
-        return f"{self.dropped_by + ('/' + self.rotation if self.rotation else ''):30}: {self.total_chance:.3}%"
+        return f"{self.dropped_by + ('/' + self.rotation if self.rotation else ''):.<40}: {self.total_chance:.3}%"
