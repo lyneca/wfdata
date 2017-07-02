@@ -1,24 +1,20 @@
 from bs4 import BeautifulSoup
 from mod import EnemyModDrop, MissionDrop
+from hashlib import sha256
+from datetime import date
 import requests
 import sys
 import os
-print("Starting update. This might take a while; we're parsing a lot of HTML here.")
-print('Downloading page...    ', end='')
-sys.stdout.flush()
-r = requests.get('http://n8k6e2y6.ssl.hwcdn.net/repos/hnfvc0o3jnfvc873njb03enrf56.html')
-print('done.')
-print('Parsing...             ', end='')
-sys.stdout.flush()
-soup = BeautifulSoup(r.content.decode(), "html5lib")
-print('done.')
 
-def save_mods():
-    print('Extracting mod info... ', end='')
+def dprint(*args, **kwargs):
+    if __name__ == '__main__':
+        print(*args, **kwargs)
+
+def save_mods(soup):
+    dprint('Extracting mod info... ', end='')
     sys.stdout.flush()
     mod_locations = soup.find_all(id='modLocations')[0].next_sibling
     mod_locations = next(mod_locations.children).contents
-    i = -1
     mods = []
     for element in mod_locations:
         if 'class' in element and element['class'] == 'blank-row':
@@ -33,16 +29,16 @@ def save_mods():
                 float(element.contents[2].string.split()[-1][1:-2]),
                 ' '.join(element.contents[2].string.split()[:-1])
             ))
-    print('done.')
-    print('Writing to file...     ', end='')
+    dprint('done.')
+    dprint('Writing to file...     ', end='')
     sys.stdout.flush()
 
     if not os.path.exists('data/mods.db'): open('data/mods.db', 'x').close()
     open('data/mods.db', 'w').write(repr(mods))
-    print('done.')
+    dprint('done.')
 
-def save_missions():
-    print('Extracting mission info... ', end='')
+def save_missions(soup):
+    dprint('Extracting mission info... ', end='')
     sys.stdout.flush()
     locations = soup.find_all(id='missionRewards')[0].next_sibling
     locations = next(locations.children).contents
@@ -63,14 +59,45 @@ def save_missions():
                 rotation,
                 float(element.contents[1].string.split()[-1][1:-2])
             ))
-    print('done.')
-    print('Writing to file...     ', end='')
+    dprint('done.')
+    dprint('Writing to file...     ', end='')
     sys.stdout.flush()
 
     if not os.path.exists('data/missions.db'): open('data/missions.db', 'x').close()
     open('data/missions.db', 'w').write(repr(missions))
-    print('done.')
+    dprint('done.')
 
-save_mods()
-save_missions()
-print('finished.')
+def update():
+    dprint("Starting update. This might take a while; we're parsing a lot of HTML here.")
+    dprint('Downloading page...    ', end='')
+    sys.stdout.flush()
+    r = requests.get('http://n8k6e2y6.ssl.hwcdn.net/repos/hnfvc0o3jnfvc873njb03enrf56.html')
+    dprint('done.')
+    
+    if os.path.exists('data/latest_hash.sha'):
+        last_hash = open('data/latest_hash.sha').read()
+        if sha256(r.content).hexdigest() == last_hash:
+            dprint("No change since last update.")
+            dprint("Finished.")
+            return
+    
+    today = date.today().isoformat()
+    if not os.path.exists(f'data/backups/{today}.html'):
+        open(f'data/backups/{today}.html', 'x').close()
+    open(f'data/backups/{today}.html', 'w').write(r.content.decode())
+
+    if not os.path.exists('data/latest_hash.sha'): open('data/latest_hash.sha', 'x').close()
+    open('data/latest_hash.sha', 'w').write(sha256(r.content).hexdigest())
+
+    dprint('Parsing...             ', end='')
+    sys.stdout.flush()
+    soup = BeautifulSoup(r.content.decode(), "html5lib")
+    dprint('done.')
+
+    save_mods(soup)
+    save_missions(soup)
+
+    dprint('Finished.')
+
+if __name__ == '__main__':
+    update()
