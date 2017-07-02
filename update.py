@@ -11,7 +11,7 @@ def dprint(*args, **kwargs):
         print(*args, **kwargs)
 
 def save_mods(soup):
-    dprint('Extracting mod info... ', end='')
+    dprint('Extracting mods... ', end='')
     sys.stdout.flush()
     mod_locations = soup.find_all(id='modLocations')[0].next_sibling
     mod_locations = next(mod_locations.children).contents
@@ -38,7 +38,7 @@ def save_mods(soup):
     dprint('done.')
 
 def save_missions(soup):
-    dprint('Extracting mission info... ', end='')
+    dprint('Extracting missions... ', end='')
     sys.stdout.flush()
     locations = soup.find_all(id='missionRewards')[0].next_sibling
     locations = next(locations.children).contents
