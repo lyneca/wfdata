@@ -6,4 +6,4 @@ class EnemyModDrop:
         self.mod_chance_name = c
         self.total_chance = (self.mod_chance/100 * self.enemy_mod/100) * 100
     def __repr__(self):
-        return f"EnemyModDrop(\"{self.name:20}\",{self.enemy_mod},{self.mod_chance},\"{self.mod_chance_name}\")"
+        return f"EnemyModDrop(\"{self.name}\",{self.enemy_mod},{self.mod_chance},\"{self.mod_chance_name}\")"
