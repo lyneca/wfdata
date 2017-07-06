@@ -26,3 +26,8 @@ Finished.
 `update.py` hashes and saves the data, and will only reparse and save if the data has changed.
 
 More importantly, it will also save a dated backup whenever the site has changed since it was last run. I have mine set up on a cron job to check and backup every day, and I'll be committing changes whenever I see them.
+
+### Requirements
+- Python 3.6 or higher
+- `fuzzywuzzy <https://github.com/seatgeek/fuzzywuzzy/>`_
+- `beutifulsoup <https://pypi.python.org/pypi/beautifulsoup4https://pypi.python.org/pypi/beautifulsoup4/>`_
