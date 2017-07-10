@@ -54,3 +54,6 @@ class MissionDrop(ModDrop):
 
     def __str__(self):
         return f"{self.dropped_by + ('/' + self.rotation if self.rotation else ''):.<40}: {self.total_chance:.3}%"
+
+    def reverseName(self):
+        return f"{((self.rotation if self.rotation else '') + ': ' + self.name):.<40}: {self.total_chance:.3}%"
