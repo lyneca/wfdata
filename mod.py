@@ -16,7 +16,7 @@ class ModDrop:
 
 class EnemyModDrop(ModDrop):
     """
-    Class for mods that drop from enemies
+    Class for mods and blueprints that drop from enemies
     """
     def __init__(self, e, n, em, m, c):
         """

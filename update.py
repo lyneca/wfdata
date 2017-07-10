@@ -11,10 +11,12 @@ def dprint(*args, **kwargs):
         print(*args, **kwargs)
 
 def save_mods(soup):
-    dprint('Extracting mods... ', end='')
+    dprint('Extracting mods and blueprints... ', end='')
     sys.stdout.flush()
-    mod_locations = soup.find_all(id='modLocations')[0].next_sibling
-    mod_locations = next(mod_locations.children).contents
+    mod_locations = []
+    rewardsTableNames = ['modLocations', 'blueprintLocations']
+    for name in rewardsTableNames:
+        mod_locations += next(soup.find_all(id=name)[0].next_sibling.children).contents
     mods = []
     for element in mod_locations:
         if 'class' in element and element['class'] == 'blank-row':
@@ -30,7 +32,7 @@ def save_mods(soup):
                 ' '.join(element.contents[2].string.split()[:-1])
             ))
     dprint('done.')
-    dprint('Writing to file...     ', end='')
+    dprint('Writing to file...                ', end='')
     sys.stdout.flush()
 
     if not os.path.exists('data/mods.db'): open('data/mods.db', 'x').close()
@@ -38,7 +40,7 @@ def save_mods(soup):
     dprint('done.')
 
 def save_missions(soup):
-    dprint('Extracting missions... ', end='')
+    dprint('Extracting missions...            ', end='')
     sys.stdout.flush()
     locations = []
     rewardsTableNames = ['missionRewards', 'relicRewards', 'keyRewards', 'transientRewards', 'sortieRewards']
@@ -62,7 +64,7 @@ def save_missions(soup):
                 float(element.contents[1].string.split()[-1][1:-2])
             ))
     dprint('done.')
-    dprint('Writing to file...     ', end='')
+    dprint('Writing to file...                ', end='')
     sys.stdout.flush()
 
     if not os.path.exists('data/missions.db'): open('data/missions.db', 'x').close()
@@ -71,7 +73,7 @@ def save_missions(soup):
 
 def update():
     dprint("Starting update. This might take a while; we're parsing a lot of HTML here.")
-    dprint('Downloading page...    ', end='')
+    dprint('Downloading page...               ', end='')
     sys.stdout.flush()
     r = requests.get('http://n8k6e2y6.ssl.hwcdn.net/repos/hnfvc0o3jnfvc873njb03enrf56.html')
     dprint('done.')
@@ -94,7 +96,7 @@ def update():
     if not os.path.exists('data/latest_hash.sha'): open('data/latest_hash.sha', 'x').close()
     open('data/latest_hash.sha', 'w').write(sha256(r.content).hexdigest())
 
-    dprint('Parsing...             ', end='')
+    dprint('Parsing...                        ', end='')
     sys.stdout.flush()
     soup = BeautifulSoup(r.content.decode(), "html5lib")
     dprint('done.')
