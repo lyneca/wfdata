@@ -40,8 +40,10 @@ def save_mods(soup):
 def save_missions(soup):
     dprint('Extracting missions... ', end='')
     sys.stdout.flush()
-    locations = soup.find_all(id='missionRewards')[0].next_sibling
-    locations = next(locations.children).contents
+    locations = []
+    rewardsTableNames = ['missionRewards', 'relicRewards', 'keyRewards', 'transientRewards', 'sortieRewards']
+    for name in rewardsTableNames:
+        locations += next(soup.find_all(id=name)[0].next_sibling.children).contents
     missions = []
     for element in locations:
         if 'class' in element and element['class'] == 'blank-row':
@@ -73,6 +75,9 @@ def update():
     sys.stdout.flush()
     r = requests.get('http://n8k6e2y6.ssl.hwcdn.net/repos/hnfvc0o3jnfvc873njb03enrf56.html')
     dprint('done.')
+    
+    if not os.path.exists('data/backups'):
+        os.makedirs('data/backups')
     
     if os.path.exists('data/latest_hash.sha'):
         last_hash = open('data/latest_hash.sha').read()
