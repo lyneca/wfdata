@@ -5,6 +5,7 @@ from relic import Relic, RelicDrop
 from mission import Mission
 from hashlib import sha256
 from datetime import datetime
+import re
 import requests
 import sys
 import os
@@ -46,7 +47,7 @@ def save_missions(soup):
     dprint('Extracting missions...            ', end='')
     sys.stdout.flush()
     locations = []
-    rewardsTableNames = ['missionRewards', 'relicRewards', 'keyRewards', 'transientRewards', 'sortieRewards']
+    rewardsTableNames = ['missionRewards'] # 'relicRewards', 'keyRewards', 'transientRewards', 'sortieRewards'
     for name in rewardsTableNames:
         locations += next(soup.find_all(id=name)[0].next_sibling.children).contents
     missions = []
@@ -137,7 +138,7 @@ def update():
     soup = BeautifulSoup(r.content.decode(), "html5lib")
     dprint('done.')
 
-    save_mods(soup)
+    # save_mods(soup)
     save_missions(soup)
 
     dprint('Finished.')
