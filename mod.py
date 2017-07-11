@@ -34,14 +34,13 @@ class EnemyModDrop(ModDrop):
     def __repr__(self):
         return f"EnemyModDrop(\"{self.dropped_by}\",\"{self.name}\",{self.enemy_mod},{self.mod_chance},\"{self.mod_chance_name}\")"
 
-
 class MissionDrop(ModDrop):
     """
     Class for mods and items that drop from missions
     """
     def __init__(self, m, n, r, c):
         """
-        :param m: Mission name
+        :param m: Mission object 
         :param n: Item/Mod name
         :param r: Rotation (or '' if not applicable)
         :param c: Drop chance of the mod
@@ -50,7 +49,7 @@ class MissionDrop(ModDrop):
         self.rotation = r
 
     def __repr__(self):
-        return f"MissionDrop(\"{self.dropped_by}\",\"{self.name}\",\"{self.rotation}\",{self.total_chance})"
+        return f"MissionDrop({repr(self.dropped_by)},\"{self.name}\",\"{self.rotation}\",{self.total_chance})"
 
     def __str__(self):
-        return f"{self.dropped_by + ('/' + self.rotation if self.rotation else ''):.<40}: {self.total_chance:.3}%"
+        return f"{str(self.dropped_by) + ('/' + self.rotation if self.rotation else ''):.<40}: {self.total_chance:.3}%"

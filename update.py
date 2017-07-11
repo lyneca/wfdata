@@ -1,7 +1,10 @@
+#!/usr/bin/python3
 from bs4 import BeautifulSoup
 from mod import EnemyModDrop, MissionDrop
+from relic import Relic, RelicDrop
+from mission import Mission
 from hashlib import sha256
-from datetime import date
+from datetime import datetime
 import requests
 import sys
 import os
@@ -53,8 +56,19 @@ def save_missions(soup):
                 rotation = ''
                 current_element = element.string
         elif len(element.contents) == 2 and not element.contents[0].name == 'th':
+            event = False
+            mission = current_element
+            if mission.split()[0] == "Event:":
+                event = True
+                mission = ' '.join(mission.split()[1:])
+            mission = Mission(
+                    mission.split('/')[0],
+                    mission.split('(')[0].split('/')[1][:-1],
+                    mission.split()[1][1:-1],
+                    event
+            )
             missions.append(MissionDrop(
-                current_element,
+                mission,
                 element.contents[0].string,
                 rotation,
                 float(element.contents[1].string.split()[-1][1:-2])
@@ -66,6 +80,28 @@ def save_missions(soup):
     if not os.path.exists('data/missions.db'): open('data/missions.db', 'x').close()
     open('data/missions.db', 'w').write(repr(missions))
     dprint('done.')
+
+def save_relics(soup):
+    dprint('Extracting relics... ', end='')
+    sys.stdout.flush()
+    locations = soup.find_all(id='relicRewards')[0].next_sibling
+    locations = next(locations.children).contents
+    missions = []
+    for element in locations:
+        if 'class' in element and element['class'] == 'blank-row':
+            continue 
+        if element.contents[0].name == 'th' and len(element.contents) == 1:
+            current_element = element.string
+        elif len(element.contents) == 2 and not element.contents[0].name == 'th':
+            relics.append(RelicDrop(
+                mission,
+                element.contents[0].string,
+                rotation,
+                float(element.contents[1].string.split()[-1][1:-2])
+            ))
+    dprint('done.')
+    dprint('Writing to file...     ', end='')
+    sys.stdout.flush()
 
 def update():
     dprint("Starting update. This might take a while; we're parsing a lot of HTML here.")
@@ -81,7 +117,7 @@ def update():
             dprint("Finished.")
             return
     
-    today = date.today().isoformat()
+    today = datetime.now().isoformat()
     if not os.path.exists(f'data/backups/{today}.html'):
         open(f'data/backups/{today}.html', 'x').close()
     open(f'data/backups/{today}.html', 'w').write(r.content.decode())

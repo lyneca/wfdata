@@ -1,4 +1,6 @@
+#!/usr/bin/python3
 from mod import EnemyModDrop, MissionDrop
+from mission import Mission
 from fuzzywuzzy import process
 
 def dprint(*args, **kwargs):
