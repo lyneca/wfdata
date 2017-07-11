@@ -2,7 +2,7 @@
 from bs4 import BeautifulSoup
 from mod import EnemyModDrop, MissionDrop
 from relic import Relic, RelicDrop
-from mission import Mission
+from mission import Mission, GenericDropLocation
 from hashlib import sha256
 from datetime import datetime
 import re
@@ -47,7 +47,7 @@ def save_missions(soup):
     dprint('Extracting missions...            ', end='')
     sys.stdout.flush()
     locations = []
-    rewardsTableNames = ['missionRewards'] # 'relicRewards', 'keyRewards', 'transientRewards', 'sortieRewards'
+    rewardsTableNames = ['missionRewards', 'keyRewards', 'transientRewards', 'sortieRewards']
     for name in rewardsTableNames:
         locations += next(soup.find_all(id=name)[0].next_sibling.children).contents
     missions = []
@@ -62,16 +62,24 @@ def save_missions(soup):
                 current_element = element.string
         elif len(element.contents) == 2 and not element.contents[0].name == 'th':
             event = False
-            mission = current_element
+            mission = current_element.replace('Infested Salvage', 'Salvage')
             if mission.split()[0] == "Event:":
                 event = True
                 mission = ' '.join(mission.split()[1:])
-            mission = Mission(
-                    mission.split('/')[0],
-                    mission.split('(')[0].split('/')[1][:-1],
-                    mission.split()[1][1:-1],
-                    event
-            )
+            if re.match(r'^([\w -]+)/([\w -]+) \(([\w -]+)\)$', mission):
+                match = re.search(r'^([\w -]+)/([\w -]+) \(([\w -]+)\)$', mission)
+                mission = Mission(
+                        match.group(1),
+                        match.group(2),
+                        match.group(3),
+                        event
+                )
+            elif mission.startswith('Orokin Derelict'):
+                mission_type = mission.split()[-1]
+                mission = Mission('Derelict', mission_type, mission_type, False)
+            else:
+
+                mission = GenericDropLocation(mission)
             missions.append(MissionDrop(
                 mission,
                 element.contents[0].string,
@@ -138,7 +146,7 @@ def update():
     soup = BeautifulSoup(r.content.decode(), "html5lib")
     dprint('done.')
 
-    # save_mods(soup)
+    save_mods(soup)
     save_missions(soup)
 
     dprint('Finished.')

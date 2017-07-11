@@ -11,10 +11,10 @@ class ModDrop:
         return f"ModDrop(\"{self.dropped_by}\",\"{self.name}\",{self.total_chance})"
 
     def __str__(self):
-        return f"{self.dropped_by:.<40}: {self.total_chance:.3}%"
+        return f"{self.dropped_by:.<45}: {self.total_chance:0<4.3f}%"
 
     def reversedName(self):
-        return f"{self.name:.<40}: {self.total_chance:.3}%"
+        return f"{self.name:.<45}: {self.total_chance:0<4.3f}%|"
 
 
 class EnemyModDrop(ModDrop):
@@ -55,7 +55,7 @@ class MissionDrop(ModDrop):
         return f"MissionDrop({repr(self.dropped_by)},\"{self.name}\",\"{self.rotation}\",{self.total_chance})"
 
     def __str__(self):
-        return f"{str(self.dropped_by) + ('/' + self.rotation if self.rotation else ''):.<40}: {self.total_chance:.3}%"
+        return f"{str(self.dropped_by) + (' Rot ' + self.rotation if self.rotation else ''):.<45}: {self.total_chance:0<4.3f}%"
 
     def reversedName(self):
-        return f"{((self.rotation if self.rotation else '') + ': ' + self.name):.<40}: {self.total_chance:.3}%"
+        return f"{((self.rotation if self.rotation else '') + ': ' + self.name):.<40}: {self.total_chance:0<4.3f}%"

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from mod import EnemyModDrop, MissionDrop
-from mission import Mission
+from mission import Mission, GenericDropLocation
 from fuzzywuzzy import process, fuzz, utils
 
 def dprint(*args, **kwargs):
@@ -12,7 +12,7 @@ missions = eval(open('data/missions.db').read())
 item_names = list(set([x.name for x in mods] + [x.dropped_by for x in mods] + [x.name for x in missions] + [x.dropped_by for x in missions]))
 
 def query(q):
-    nameScoreTuples = process.extractBests(q, item_names, utils.full_process, fuzz.WRatio, 25, 10)
+    nameScoreTuples = process.extractBests(q, item_names, utils.full_process, fuzz.WRatio, 25, 1)
     #Sort the results so the higher scored ones will be right above the console cursor
     nameScoreTuples.sort(key=lambda x: x[1])
     m = []
