@@ -13,6 +13,9 @@ class ModDrop:
     def __str__(self):
         return f"{self.dropped_by:.<40}: {self.total_chance:.3}%"
 
+    def reversedName(self):
+        return f"{self.name:.<40}: {self.total_chance:.3}%"
+
 
 class EnemyModDrop(ModDrop):
     """
@@ -55,5 +58,5 @@ class MissionDrop(ModDrop):
     def __str__(self):
         return f"{self.dropped_by + ('/' + self.rotation if self.rotation else ''):.<40}: {self.total_chance:.3}%"
 
-    def reverseName(self):
+    def reversedName(self):
         return f"{((self.rotation if self.rotation else '') + ': ' + self.name):.<40}: {self.total_chance:.3}%"
