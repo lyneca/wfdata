@@ -29,5 +29,5 @@ More importantly, it will also save a dated backup whenever the site has changed
 
 ### Requirements
 - Python 3.6 or higher
-- `fuzzywuzzy <https://github.com/seatgeek/fuzzywuzzy/>`_
-- `beutifulsoup <https://pypi.python.org/pypi/beautifulsoup4https://pypi.python.org/pypi/beautifulsoup4/>`_
+- [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy/)
+- [beutifulsoup](https://pypi.python.org/pypi/beautifulsoup4https://pypi.python.org/pypi/beautifulsoup4/>)
